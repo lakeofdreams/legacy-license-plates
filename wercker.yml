@@ -47,46 +47,34 @@ test:
      password: $QUAY_IO_PASSWORD
      tag: latest
      user: root
-     #volumes: /dev/shm 
-  
+   - name: weblogic
+     id: quay.io/ravi_r_singhal/weblogic
+     username: $QUAY_IO_USERNAME
+     password: $QUAY_IO_PASSWORD
+     tag: stage
+     user: root
+
   box: 
-   id: quay.io/ravi_r_singhal/weblogic
-   username: $QUAY_IO_USERNAME
-   password: $QUAY_IO_PASSWORD
-   tag: stage
-   user: root
-  
-   steps:
-    - script:
-       name: "Start the application" 
-       code: | 
-         echo "$DATABASE_PORT_1521_TCP_ADDR database" >> /etc/hosts
-         mkdir /test_out
-         nohup /u01/oracle/entrypoint.sh > /test_out/startup.log 2>1&
+   id: golang  
+
+  steps:
     - script:
        name: "Wait for application to be available" 
        code: | 
-         while ! nc localhost 7001 < /dev/null; do sleep 3; done
-         # sleep for some extra time for app setup
-         sleep 20
+         until $(curl --output /dev/null --silent --head --fail http://weblogic:7001/licenseplates/rest/plates/list); do
+           printf '.'
+           sleep 5
+         done
     - script:
        name: "Test Get Request" 
        code: | 
-         status="$(curl --max-time 5 -Is http://localhost:7001/licenseplates/rest/plates/get-by-plate-number/ABC-123 | head -1)"
-         validate=( $status )
-         if [ "${validate[1]}" == "200" ]; then
-           echo "Successful"
-         else
-           echo "Failed"
-           exit(1)
-         fi 
-          
+         go run main.go 
 deploy:
   steps:          
     - blendle/publish-quay-tag:
         name: "Push staged image"
         token: $QUAY_IO_TOKEN
-        repository: quay.io/ravi_r_singhal/weblogic
+        repository: ravi_r_singhal/weblogic
         current: stage
         tag: licenseplates
     #Kubernetes deploy step here
