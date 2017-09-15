@@ -1,4 +1,11 @@
 # Copyright 2017, Oracle Corporation and/or affiliates.  All rights reserved.
+services:
+   - name: database 
+     id: quay.io/ravi_r_singhal/database
+     username: $QUAY_IO_USERNAME
+     password: $QUAY_IO_PASSWORD
+     tag: 12.1.0.2
+     volumes: /dev/shm 
 
 box: 
   id: quay.io/markxnelson/weblogic
@@ -23,20 +30,48 @@ build:
          fi 
          cp target/licenseplates.war /u01/oracle/.
     - markxnelson/weblogic-step@0.1.24:
+        name: "Setup weblogic domain" 
         config: weblogic-config.json
     - script:
         name: "Copy the DDL statements into place"
         code: |
           cp $WERCKER_SOURCE_DIR/create-users.sql /u01/oracle/create-users.sql
           cp $WERCKER_SOURCE_DIR/create-schema.sql /u01/oracle/create-schema.sql
+
+test:
+  steps:
+    - script:
+       name: "Start the application" 
+       code: | 
+         mkdir /test_out
+         nohup /u01/oracle/entrypoint.sh > /test_out/startup.log 2>1&
+    - script:
+       name: "Wait for application to be available" 
+       code: | 
+         while ! nc localhost 7001 < /dev/null; do sleep 3; done
+         # sleep for some extra time for app setup
+         sleep 20
+    - script:
+       name: "Test Get Request" 
+       code: | 
+         status="$(curl --max-time 5 -Is http://localhost:7001/licenseplates/rest/plates/get-by-plate-number/ABC-123 | head -1)"
+         validate=( $status )
+         if [ "${validate[1]}" == "200" ]; then
+           echo "Successful"
+         else
+           echo "Failed"
+         fi 
+          
+deploy:
+  steps:          
     - internal/docker-push:
         username: $QUAY_IO_USERNAME
         password: $QUAY_IO_PASSWORD
-        repository: quay.io/markxnelson/weblogic
+        repository: quay.io/ravi_r_singhal/weblogic
         tag: licenseplates
         ports: "7001"
         entrypoint: "/u01/oracle/entrypoint.sh"
-
+    #Kubernetes deploy step here
 dev:
   steps:
 #    - markxnelson/weblogic-step@0.1.15:
