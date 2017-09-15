@@ -57,7 +57,7 @@ test:
     - script:
        name: "Start the application" 
        code: | 
-         echo "$DATABASE_PORT_1521_TCP_ADDR" >> /etc/hosts
+         echo "$DATABASE_PORT_1521_TCP_ADDR database" >> /etc/hosts
          mkdir /test_out
          nohup /u01/oracle/entrypoint.sh > /test_out/startup.log 2>1&
     - script:
