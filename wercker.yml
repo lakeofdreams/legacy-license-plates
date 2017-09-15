@@ -36,7 +36,8 @@ build:
         repository: quay.io/ravi_r_singhal/weblogic
         tag: stage
         ports: "7001"
-        entrypoint: "/u01/oracle/entrypoint.sh" 
+        entrypoint: "/u01/oracle/entrypoint.sh"
+        user: root 
         
 test:  
   services:
@@ -45,6 +46,7 @@ test:
      username: $QUAY_IO_USERNAME
      password: $QUAY_IO_PASSWORD
      tag: latest
+     user: root
      #volumes: /dev/shm 
   
   box: 
@@ -52,6 +54,7 @@ test:
    username: $QUAY_IO_USERNAME
    password: $QUAY_IO_PASSWORD
    tag: stage
+   user: root
   
    steps:
     - script:
