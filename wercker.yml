@@ -68,6 +68,7 @@ test:
     - script:
        name: "Test Get Request" 
        code: | 
+         # Tests add, get and get-all so far..
          go run main.go 
 deploy:
   steps:          
