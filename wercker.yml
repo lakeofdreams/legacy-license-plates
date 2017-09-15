@@ -1,11 +1,4 @@
 # Copyright 2017, Oracle Corporation and/or affiliates.  All rights reserved.
-services:
-   - name: database 
-     id: quay.io/ravi_r_singhal/database
-     username: $QUAY_IO_USERNAME
-     password: $QUAY_IO_PASSWORD
-     tag: 12.1.0.2
-     volumes: /dev/shm 
 
 box: 
   id: quay.io/markxnelson/weblogic
@@ -37,12 +30,34 @@ build:
         code: |
           cp $WERCKER_SOURCE_DIR/create-users.sql /u01/oracle/create-users.sql
           cp $WERCKER_SOURCE_DIR/create-schema.sql /u01/oracle/create-schema.sql
-
-test:
-  steps:
+    - internal/docker-push:
+        username: $QUAY_IO_USERNAME
+        password: $QUAY_IO_PASSWORD
+        repository: quay.io/ravi_r_singhal/weblogic
+        tag: stage
+        ports: "7001"
+        entrypoint: "/u01/oracle/entrypoint.sh" 
+        
+test:  
+  services:
+   - name: database 
+     id: quay.io/ravi_r_singhal/database
+     username: $QUAY_IO_USERNAME
+     password: $QUAY_IO_PASSWORD
+     tag: latest
+     #volumes: /dev/shm 
+  
+  box: 
+   id: quay.io/ravi_r_singhal/weblogic
+   username: $QUAY_IO_USERNAME
+   password: $QUAY_IO_PASSWORD
+   tag: stage
+  
+   steps:
     - script:
        name: "Start the application" 
        code: | 
+         echo "$DATABASE_PORT_1521_TCP_ADDR" >> /etc/hosts
          mkdir /test_out
          nohup /u01/oracle/entrypoint.sh > /test_out/startup.log 2>1&
     - script:
@@ -60,17 +75,17 @@ test:
            echo "Successful"
          else
            echo "Failed"
+           exit(1)
          fi 
           
 deploy:
   steps:          
-    - internal/docker-push:
-        username: $QUAY_IO_USERNAME
-        password: $QUAY_IO_PASSWORD
+    - blendle/publish-quay-tag:
+        name: "Push staged image"
+        token: $QUAY_IO_TOKEN
         repository: quay.io/ravi_r_singhal/weblogic
+        current: stage
         tag: licenseplates
-        ports: "7001"
-        entrypoint: "/u01/oracle/entrypoint.sh"
     #Kubernetes deploy step here
 dev:
   steps:
