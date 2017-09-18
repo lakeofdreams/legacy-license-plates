@@ -37,7 +37,7 @@ build:
         tag: stage
         ports: "7001"
         entrypoint: "/u01/oracle/entrypoint.sh"
-        user: root
+        user: root 
         
 test:  
   services:
@@ -58,38 +58,6 @@ test:
    id: golang  
 
   steps:
-    - kubectl:
-       server: $KUBERNETES_MASTER
-       gcloud-key-json: $GCLOUD_KEY_JSON
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
-       insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER
-       gcloud-key-json: $GCLOUD_KEY_JSON
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
-       insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER
-       gcloud-key-json: $GCLOUD_KEY_JSON
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
-       insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER
-       gcloud-key-json: $GCLOUD_KEY_JSON
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
-       insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml
     - script:
        name: "Wait for application to be available" 
        code: | 
