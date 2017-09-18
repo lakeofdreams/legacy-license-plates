@@ -39,20 +39,7 @@ build:
         entrypoint: "/u01/oracle/entrypoint.sh"
         user: root
         
-test:  
-  services:
-   - name: database 
-     id: quay.io/ravi_r_singhal/database
-     username: $QUAY_IO_USERNAME
-     password: $QUAY_IO_PASSWORD
-     tag: latest
-     user: root
-   - name: weblogic
-     id: quay.io/ravi_r_singhal/weblogic
-     username: $QUAY_IO_USERNAME
-     password: $QUAY_IO_PASSWORD
-     tag: stage
-     user: root
+test:
 
   box: 
    id: golang  
@@ -73,7 +60,7 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml
+       command: create -f database-service.yaml
     - kubectl:
        server: $KUBERNETES_MASTER
        gcloud-key-json: $GCLOUD_KEY_JSON
@@ -81,7 +68,7 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml
+       command: create -f weblogic-deployment.yaml
     - kubectl:
        server: $KUBERNETES_MASTER
        gcloud-key-json: $GCLOUD_KEY_JSON
@@ -89,19 +76,20 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml
-    - script:
-       name: "Wait for application to be available" 
-       code: | 
-         until $(curl --output /dev/null --silent --head --fail http://weblogic:7001/licenseplates/rest/plates/list); do
-           printf '.'
-           sleep 5
-         done
-    - script:
-       name: "Test Get Request" 
-       code: | 
-         # Tests add, get and get-all so far..
-         go run main.go 
+       command: create -f weblogic-service.yaml
+    #- script:
+     #  name: "Wait for application to be available"
+      # code: |
+       #  until $(curl --output /dev/null --silent --head --fail http://weblogic:7001/licenseplates/rest/plates/list); do
+        #   printf '.'
+         #  sleep 5
+         #done
+    #- script:
+     #  name: "Test Get Request"
+
+      # code: |
+       #  # Tests add, get and get-all so far..
+        # go run main.go
 deploy:
   steps:          
     - blendle/publish-quay-tag:
