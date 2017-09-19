@@ -54,8 +54,7 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: rolling-update database
-       image: quay.io/ravi_r_singhal/database:12.1.0.2
+       command: create -f database-deployment.yaml
     - kubectl:
        server: $KUBERNETES_MASTER
        username: $KUBERNETES_USERNAME
@@ -65,8 +64,37 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: rolling-update weblogic
-       image: quay.io/ravi_r_singhal/weblogic:stage
+       command: create -f database-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: create -f weblogic-deployment.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: create -f weblogic-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
     - script:
        name: "Wait for application to be available"
        code: |
