@@ -54,7 +54,7 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: delete -f weblogic-deployment.yaml
+       command: create -f database-deployment.yaml
     - kubectl:
        server: $KUBERNETES_MASTER
        username: $KUBERNETES_USERNAME
@@ -64,11 +64,7 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: delete -f weblogic-service.yaml
-    - script:
-       name: "Sleep for some time for clean up"
-       code: |
-         sleep 30
+       command: create -f database-service.yaml
     - kubectl:
        server: $KUBERNETES_MASTER
        username: $KUBERNETES_USERNAME
@@ -89,6 +85,16 @@ test:
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
        command: create -f weblogic-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
     - script:
        name: "Wait for application to be available"
        code: |
@@ -100,6 +106,56 @@ test:
        name: "Run test cases"
        code: |
          go run main.go
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: delete -f database-deployment.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: delete -f database-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: delete -f weblogic-deployment.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: delete -f weblogic-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: delete svc oow-load-balancer
 deploy:
   steps:          
     - blendle/publish-quay-tag:
