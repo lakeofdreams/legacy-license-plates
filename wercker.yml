@@ -68,6 +68,7 @@ test:
     - script:
        name: "Wait for application to be available"
        code: |
+         sleep(20)
          until $(curl --output /dev/null --silent --head --fail http://$WEBLOGIC_HOST:7001/licenseplates/rest/plates/list); do
            printf '.'
            sleep 5
