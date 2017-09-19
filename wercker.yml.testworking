@@ -108,56 +108,6 @@ deploy:
         repository: ravi_r_singhal/weblogic
         current: stage
         tag: licenseplates
-    - kubectl:
-       server: $KUBERNETES_MASTER_PROD
-       username: $KUBERNETES_USERNAME_PROD
-       password: $KUBERNETES_PASSWORD_PROD
-       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
-       insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER_PROD
-       username: $KUBERNETES_USERNAME_PROD
-       password: $KUBERNETES_PASSWORD_PROD
-       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
-       insecure-skip-tls-verify: true
-       command: create -f database-service.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER_PROD
-       username: $KUBERNETES_USERNAME_PROD
-       password: $KUBERNETES_PASSWORD_PROD
-       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
-       insecure-skip-tls-verify: true
-       command: create -f weblogic-deployment_prod.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER_PROD
-       username: $KUBERNETES_USERNAME_PROD
-       password: $KUBERNETES_PASSWORD_PROD
-       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
-       insecure-skip-tls-verify: true
-       command: create -f weblogic-service.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER_PROD
-       username: $KUBERNETES_USERNAME_PROD
-       password: $KUBERNETES_PASSWORD_PROD
-       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
-       insecure-skip-tls-verify: true
-       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
     #Kubernetes deploy step here
 dev:
   steps:
