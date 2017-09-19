@@ -57,6 +57,8 @@ func main() {
 
 	testGetPlateById()
 
+	invokeRest(DELETE_ALL, nil)
+
 	fmt.Println(statuses)
 }
 

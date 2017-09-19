@@ -34,7 +34,7 @@ build:
         username: $QUAY_IO_USERNAME
         password: $QUAY_IO_PASSWORD
         repository: quay.io/ravi_r_singhal/weblogic
-        tag: stage
+        tag: ${WERCKER_GIT_COMMIT}
         ports: "7001"
         entrypoint: "/u01/oracle/entrypoint.sh"
         user: root
@@ -54,8 +54,7 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: rolling-update database
-       image: quay.io/ravi_r_singhal/database:12.1.0.2
+       command: set image deployment/webogic weblogic=quay.io/ravi_r_singhal/weblogic:${WERCKER_GIT_COMMIT}
     - kubectl:
        server: $KUBERNETES_MASTER
        username: $KUBERNETES_USERNAME
@@ -65,8 +64,7 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: rolling-update weblogic
-       image: quay.io/ravi_r_singhal/weblogic:stage
+       command: rollout status deployment/weblogic
     - script:
        name: "Wait for application to be available"
        code: |
@@ -84,7 +82,7 @@ deploy:
         name: "Push staged image"
         token: $QUAY_IO_TOKEN
         repository: ravi_r_singhal/weblogic
-        current: stage
+        current: ${WERCKER_GIT_COMMIT}
         tag: licenseplates
     #Kubernetes deploy step here
 dev:
