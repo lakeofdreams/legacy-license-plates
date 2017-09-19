@@ -45,32 +45,40 @@ test:
    id: golang  
 
   steps:
-    - riceo/kubectl:
+    - kubectl:
        server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
        gcloud-key-json: $GCLOUD_KEY_JSON
        gke-cluster-name: $GCLOUD_CLUSTER_NAME
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
        command: create -f database-deployment.yaml
-    - riceo/kubectl:
+    - kubectl:
        server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
        gcloud-key-json: $GCLOUD_KEY_JSON
        gke-cluster-name: $GCLOUD_CLUSTER_NAME
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
        command: create -f database-service.yaml
-    - riceo/kubectl:
+    - kubectl:
        server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
        gcloud-key-json: $GCLOUD_KEY_JSON
        gke-cluster-name: $GCLOUD_CLUSTER_NAME
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
        command: create -f weblogic-deployment.yaml
-    - riceo/kubectl:
+    - kubectl:
        server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
        gcloud-key-json: $GCLOUD_KEY_JSON
        gke-cluster-name: $GCLOUD_CLUSTER_NAME
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
