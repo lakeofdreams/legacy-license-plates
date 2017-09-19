@@ -54,7 +54,7 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: set image deployment/webogic weblogic=quay.io/ravi_r_singhal/weblogic:${WERCKER_GIT_COMMIT}
+       command: set image deployment/weblogic weblogic=quay.io/ravi_r_singhal/weblogic:${WERCKER_GIT_COMMIT}
     - kubectl:
        server: $KUBERNETES_MASTER
        username: $KUBERNETES_USERNAME
