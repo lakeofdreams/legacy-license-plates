@@ -48,6 +48,8 @@ func floattostr(input_num float64) string {
 
 func main() {
 
+	invokeRest(DELETE_ALL, nil)
+
 	testAddAllPlates()
 
 	testListAllPlates()
@@ -63,6 +65,8 @@ func main() {
 	testGetPlateById()
 
 	fmt.Println(statuses)
+
+	invokeRest(DELETE_ALL, nil)
 }
 
 func testGetPlateById() {
