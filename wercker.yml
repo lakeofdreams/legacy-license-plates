@@ -137,7 +137,7 @@ deploy:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
        insecure-skip-tls-verify: true
-       command: create -f weblogic-deployment_prod.yaml
+       command: create -f weblogic-deployment-prod.yaml
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
