@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"os"
 )
 
 func floattostr(input_num float64) string {
@@ -37,7 +38,8 @@ var GET_LATEST = "get-latest";
 var DELETE_ALL = "delete-all";
 var GET_BY_PLATE_NUM = "get-by-plate-number/{plate-number}";
 
-var base_url = "http://weblogic:7001/licenseplates/rest/plates";
+var hostAddress = os.Getenv("WEBLOGIC_HOST")
+var base_url = "http://"+hostAddress+":7001/licenseplates/rest/plates";
 
 var statuses map[string]string = make(map[string]string)
 var STATUS_SUCCESS = "Passed"
@@ -49,6 +51,8 @@ func main() {
 	testAddAllPlates()
 
 	testListAllPlates()
+
+	testGetPlateByPlateNum()
 
 	fmt.Println(statuses)
 
@@ -100,14 +104,39 @@ func main() {
 	
 */
 }
+func testGetPlateByPlateNum() {
+	fmt.Println("Start test: "+GET_BY_PLATE_NUM)
+	fmt.Println("Query for plate with plate num: "+plate1.PlateNumber)
+	response := invokeRest(GET_BY_PLATE_NUM,[] byte(plate1.PlateNumber))
+	if statuses[GET_BY_PLATE_NUM] != STATUS_FAILED {
+		fmt.Println("Response: " + string(response))
+		plate := Plate{}
+		json.Unmarshal(response, &plate)
+		if strings.EqualFold(plate.PlateNumber,plate1.PlateNumber) {
+			statuses[GET_BY_PLATE_NUM] = STATUS_SUCCESS
+		} else {
+			fmt.Println("Could not find plate with plate num: "+plate1.PlateNumber+" , returned plate with plate num: "+plate.PlateNumber)
+			statuses[GET_BY_PLATE_NUM] = STATUS_FAILED
+		}
+		fmt.Println("Finish test: "+GET_BY_PLATE_NUM)
+	} else {
+		fmt.Println("Failed test: "+GET_BY_PLATE_NUM)
+	}
+
+}
 func testAddAllPlates() {
 	fmt.Println("Start test: "+ADD_ALL)
 	jsonData, _ := json.Marshal(plates)
 	fmt.Println("Sending "+string(jsonData))
 	response := invokeRest(ADD_ALL,jsonData)
-	fmt.Println("Response: " + string(response))
-	statuses[ADD_ALL] = STATUS_SUCCESS
-	fmt.Println("Finish test: "+ADD_ALL)
+	if statuses[ADD_ALL] != STATUS_FAILED {
+		fmt.Println("Response: " + string(response))
+		statuses[ADD_ALL] = STATUS_SUCCESS
+		fmt.Println("Finish test: "+ADD_ALL)
+	} else {
+		fmt.Println("Failed test: "+ADD_ALL)
+	}
+
 }
 
 func testListAllPlates() {
@@ -116,25 +145,33 @@ func testListAllPlates() {
 
 	fmt.Println("Start test: "+LIST_ALL)
 	response := invokeRest(LIST_ALL,nil)
-	fmt.Println(response)
-	fmt.Println("Response: " + string(response))
-	plates = []Plate{}
-	json.Unmarshal(response, &plates)
-	for _, v := range plates {
-		if v.PlateNumber == plate1.PlateNumber {
-			plate1Found = true
+	if statuses[LIST_ALL] != STATUS_FAILED {
+		fmt.Println("Response: " + string(response))
+		plates = []Plate{}
+		json.Unmarshal(response, &plates)
+		if len(plates) != 2 {
+			statuses[LIST_ALL] = STATUS_FAILED
+			fmt.Println("Expected two plates, found : " + string(len(plates)))
 		}
-		if v.PlateNumber == plate2.PlateNumber {
-			plate2Found = true
+		for _, v := range plates {
+			if v.PlateNumber == plate1.PlateNumber {
+				plate1Found = true
+			}
+			if v.PlateNumber == plate2.PlateNumber {
+				plate2Found = true
+			}
 		}
-	}
-	if !plate1Found || !plate2Found {
-		fmt.Println("One of the plates is missing ")
-		statuses[LIST_ALL] = STATUS_FAILED
+		if !plate1Found || !plate2Found {
+			fmt.Println("One of the plates is missing ")
+			statuses[LIST_ALL] = STATUS_FAILED
+		} else {
+			statuses[LIST_ALL] = STATUS_SUCCESS
+		}
+		fmt.Println("Finish test: "+LIST_ALL)
 	} else {
-		statuses[LIST_ALL] = STATUS_SUCCESS
+		fmt.Println("Failed test: "+LIST_ALL)
 	}
-	fmt.Println("Finish test: "+LIST_ALL)
+
 }
 
 func invokeRest(api string, data []byte) ([]byte){

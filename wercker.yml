@@ -95,19 +95,17 @@ test:
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
        command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
-    #- script:
-     #  name: "Wait for application to be available"
-      # code: |
-       #  until $(curl --output /dev/null --silent --head --fail http://weblogic:7001/licenseplates/rest/plates/list); do
-        #   printf '.'
-         #  sleep 5
-         #done
-    #- script:
-     #  name: "Test Get Request"
-
-      # code: |
-       #  # Tests add, get and get-all so far..
-        # go run main.go
+    - script:
+       name: "Wait for application to be available"
+       code: |
+         until $(curl --output /dev/null --silent --head --fail http://$WEBLOGIC_HOST:7001/licenseplates/rest/plates/list); do
+           printf '.'
+           sleep 5
+         done
+    - script:
+       name: "Run test cases"
+       code: |
+         go run main.go
 deploy:
   steps:          
     - blendle/publish-quay-tag:
