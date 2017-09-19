@@ -34,7 +34,7 @@ build:
         username: $QUAY_IO_USERNAME
         password: $QUAY_IO_PASSWORD
         repository: quay.io/ravi_r_singhal/weblogic
-        tag: stage
+        tag: ${WERCKER_GIT_COMMIT}
         ports: "7001"
         entrypoint: "/u01/oracle/entrypoint.sh"
         user: root
@@ -54,7 +54,7 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml
+       command: set image deployment/weblogic weblogic=quay.io/ravi_r_singhal/weblogic:${WERCKER_GIT_COMMIT}
     - kubectl:
        server: $KUBERNETES_MASTER
        username: $KUBERNETES_USERNAME
@@ -64,40 +64,11 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: create -f database-service.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER
-       username: $KUBERNETES_USERNAME
-       password: $KUBERNETES_PASSWORD
-       gcloud-key-json: $GCLOUD_KEY_JSON
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
-       insecure-skip-tls-verify: true
-       command: create -f weblogic-deployment.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER
-       username: $KUBERNETES_USERNAME
-       password: $KUBERNETES_PASSWORD
-       gcloud-key-json: $GCLOUD_KEY_JSON
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
-       insecure-skip-tls-verify: true
-       command: create -f weblogic-service.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER
-       username: $KUBERNETES_USERNAME
-       password: $KUBERNETES_PASSWORD
-       gcloud-key-json: $GCLOUD_KEY_JSON
-       gke-cluster-name: $GCLOUD_CLUSTER_NAME
-       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
-       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
-       insecure-skip-tls-verify: true
-       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
+       command: rollout status deployment/weblogic
     - script:
        name: "Wait for application to be available"
        code: |
+         sleep(20)
          until $(curl --output /dev/null --silent --head --fail http://$WEBLOGIC_HOST:7001/licenseplates/rest/plates/list); do
            printf '.'
            sleep 5
@@ -112,7 +83,7 @@ deploy:
         name: "Push staged image"
         token: $QUAY_IO_TOKEN
         repository: ravi_r_singhal/weblogic
-        current: stage
+        current: ${WERCKER_GIT_COMMIT}
         tag: licenseplates
     #Kubernetes deploy step here
 dev:
