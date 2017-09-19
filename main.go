@@ -13,7 +13,7 @@ import (
 
 
 type Plate struct {
-	PlateId     float64 `json:"plateId"`
+	PlateId     int     `json:"plateId"`
 	State       string  `json:"state"`
 	PlateNumber string  `json:"plateNumber"`
 	Owner       string  `json:"owner"`
@@ -42,9 +42,6 @@ var statuses map[string]string = make(map[string]string)
 var STATUS_SUCCESS = "Passed"
 var STATUS_FAILED = "Failed"
 
-func floattostr(input_num float64) string {
-	return strconv.FormatFloat(input_num, 'g', 1, 64)
-}
 
 func main() {
 
@@ -71,7 +68,7 @@ func main() {
 
 func testGetPlateById() {
 	fmt.Println("Start test: " + GET_BY_ID)
-	response := invokeRest(GET_BY_ID, []byte(floattostr(plate3.PlateId)))
+	response := invokeRest(GET_BY_ID, []byte(strconv.Itoa(plate3.PlateId)))
 	if statuses[GET_BY_ID] != STATUS_FAILED {
 		fmt.Println("Response: " + string(response))
 		plate := Plate{}
@@ -80,7 +77,7 @@ func testGetPlateById() {
 			statuses[GET_BY_ID] = STATUS_SUCCESS
 			fmt.Println("Finish test: " + GET_BY_ID)
 		} else {
-			fmt.Println("Could not find plate with plate id: " + floattostr(plate3.PlateId))
+			fmt.Println("Could not find plate with plate id: " + strconv.Itoa(plate3.PlateId))
 			statuses[GET_BY_ID] = STATUS_FAILED
 			fmt.Println("Failed test: " + GET_BY_ID)
 		}
