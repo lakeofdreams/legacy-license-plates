@@ -49,6 +49,10 @@ test:
        server: $KUBERNETES_MASTER
        username: $KUBERNETES_USERNAME
        password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
        command: delete -f weblogic-deployment.yaml -f weblogic-service.yaml
     - script:
@@ -59,6 +63,10 @@ test:
        server: $KUBERNETES_MASTER
        username: $KUBERNETES_USERNAME
        password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
        command: create -f weblogic-deployment.yaml -f weblogic-service.yaml
     - script:
@@ -84,12 +92,20 @@ deploy:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
+       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
        insecure-skip-tls-verify: true
        command: set image deployment/weblogic weblogic=quay.io/ravi_r_singhal/weblogic:stage
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
+       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
        insecure-skip-tls-verify: true
        command: rollout status deployment/weblogic
 dev:
