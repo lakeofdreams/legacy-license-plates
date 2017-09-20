@@ -73,7 +73,7 @@ test:
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
+       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer --external-ip=$WEBLOGIC_HOST_TEST
 deploy:
 
   steps:          
