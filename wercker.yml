@@ -69,9 +69,9 @@ test:
        insecure-skip-tls-verify: true
        command: create -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
     - kubectl:
-       server: $KUBERNETES_MASTER_PROD
-       username: $KUBERNETES_USERNAME_PROD
-       password: $KUBERNETES_PASSWORD_PROD
+       server: $KUBERNETES_MASTER_TEST
+       username: $KUBERNETES_USERNAME_TEST
+       password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
        command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
 deploy:
@@ -90,9 +90,9 @@ deploy:
        insecure-skip-tls-verify: true
        command: delete --ignore-not-found=true -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
     - kubectl:
-       server: $KUBERNETES_MASTER_TEST
-       username: $KUBERNETES_USERNAME_TEST
-       password: $KUBERNETES_PASSWORD_TEST
+       server: $KUBERNETES_MASTER_PROD
+       username: $KUBERNETES_USERNAME_PROD
+       password: $KUBERNETES_PASSWORD_PROD
        insecure-skip-tls-verify: true
        command: delete --ignore-not-found=true svc oow-load-balancer
     - script:
