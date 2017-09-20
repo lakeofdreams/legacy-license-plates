@@ -52,6 +52,12 @@ test:
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
        command: delete --ignore-not-found=true -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER_TEST
+       username: $KUBERNETES_USERNAME_TEST
+       password: $KUBERNETES_PASSWORD_TEST
+       insecure-skip-tls-verify: true
+       command: delete --ignore-not-found=true svc oow-load-balancer
     - script:
        name: "Sleep for some time for clean up"
        code: |
@@ -83,6 +89,12 @@ deploy:
        password: $KUBERNETES_PASSWORD_PROD
        insecure-skip-tls-verify: true
        command: delete --ignore-not-found=true -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER_TEST
+       username: $KUBERNETES_USERNAME_TEST
+       password: $KUBERNETES_PASSWORD_TEST
+       insecure-skip-tls-verify: true
+       command: delete --ignore-not-found=true svc oow-load-balancer
     - script:
        name: "Sleep for some time for clean up"
        code: |

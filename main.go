@@ -35,7 +35,7 @@ var GET_LATEST = "get-latest"
 var DELETE_ALL = "delete-all"
 var GET_BY_PLATE_NUM = "get-by-plate-number/{plate-number}"
 
-var hostAddress = os.Getenv("WEBLOGIC_HOST")
+var hostAddress = os.Getenv("WEBLOGIC_HOST_TEST")
 var base_url = "http://" + hostAddress + ":7001/licenseplates/rest/plates"
 
 var statuses map[string]string = make(map[string]string)
