@@ -54,7 +54,17 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: delete -f weblogic-deployment.yaml weblogic-service.yaml
+       command: delete -f weblogic-deployment.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: delete -f weblogic-service.yaml
     - script:
        name: "Sleep for some time for clean up"
        code: |
@@ -68,7 +78,17 @@ test:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
        insecure-skip-tls-verify: true
-       command: create -f weblogic-deployment.yaml weblogic-service.yaml
+       command: create -f weblogic-deployment.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER
+       username: $KUBERNETES_USERNAME
+       password: $KUBERNETES_PASSWORD
+       gcloud-key-json: $GCLOUD_KEY_JSON
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT
+       insecure-skip-tls-verify: true
+       command: create -f weblogic-service.yaml
     - script:
        name: "Wait for application to be available"
        code: |
