@@ -117,7 +117,7 @@ deploy:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
        insecure-skip-tls-verify: true
-       command: set image deployment/weblogic weblogic=quay.io/ravi_r_singhal/weblogic:stage
+       command: create -f database-deployment.yaml
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
@@ -127,7 +127,38 @@ deploy:
        gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
        gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
        insecure-skip-tls-verify: true
-       command: rollout status deployment/weblogic
+       command: create -f database-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER_PROD
+       username: $KUBERNETES_USERNAME_PROD
+       password: $KUBERNETES_PASSWORD_PROD
+       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
+       insecure-skip-tls-verify: true
+       command: create -f weblogic-deployment-prod.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER_PROD
+       username: $KUBERNETES_USERNAME_PROD
+       password: $KUBERNETES_PASSWORD_PROD
+       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
+       insecure-skip-tls-verify: true
+       command: create -f weblogic-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER_PROD
+       username: $KUBERNETES_USERNAME_PROD
+       password: $KUBERNETES_PASSWORD_PROD
+       gcloud-key-json: $GCLOUD_KEY_JSON_PROD
+       gke-cluster-name: $GCLOUD_CLUSTER_NAME_PROD
+       gke-cluster-zone: $GCLOUD_CLUSTER_ZONE_PROD
+       gke-cluster-project: $GCLOUD_CLUSTER_PROJECT_PROD
+       insecure-skip-tls-verify: true
+       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
+    #Kubernetes deploy step here
 dev:
   steps:
 #    - markxnelson/weblogic-step@0.1.15:
