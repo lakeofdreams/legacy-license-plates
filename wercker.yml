@@ -78,7 +78,7 @@ test:
        name: "Wait for application to be available"
        code: |
          export WEBLOGIC_HOST=$WEBLOGIC_HOST_TEST
-         sleep(20)
+         sleep 20
          until $(curl --output /dev/null --silent --head --fail http://$WEBLOGIC_HOST:7001/licenseplates/rest/plates/list); do
            printf '.'
            sleep 5
@@ -128,7 +128,7 @@ deploy:
        name: "Sanity Check Production"
        code: |
          export WEBLOGIC_HOST=$WEBLOGIC_HOST_PROD
-         sleep(20)
+         sleep 20
          until $(curl --output /dev/null --silent --head --fail http://$WEBLOGIC_HOST:7001/licenseplates/rest/plates/list); do
            printf '.'
            sleep 5
