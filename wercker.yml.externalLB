@@ -73,7 +73,7 @@ test:
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer --external-ip=$WEBLOGIC_HOST_TEST --load-balancer-ip=$WEBLOGIC_HOST_TEST
+       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer --external-ip=$WEBLOGIC_HOST_TEST
     - script:
        name: "Wait for application to be available"
        code: |
@@ -123,7 +123,7 @@ deploy:
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
        insecure-skip-tls-verify: true
-       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer --external-ip=$WEBLOGIC_HOST_PROD --load-balancer-ip=$WEBLOGIC_HOST_PROD
+       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer --external-ip=$WEBLOGIC_HOST_PROD
     - script:
        name: "Sanity Check Production"
        code: |
