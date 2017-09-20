@@ -13,6 +13,7 @@ package com.oracle.services.impl;
 import com.oracle.model.Plate;
 import com.oracle.services.LicensePlateService;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,14 +47,14 @@ public class LicensePlateServiceImpl implements LicensePlateService {
 
   @SuppressWarnings("unchecked")
   public List<Plate> getAllPlates() {
-    Query query = em.createQuery("Select a FROM Plate a");
+    Query query = em.createQuery("Select a FROM Plate a order by a.ts desc");
     return query.getResultList();
   }
 
   public Plate addPlate(Plate plate) {
     try {
       utx.begin();
-      plate.setTs( new SimpleDateFormat("yyyy.MM.dd - HH.mm.ss").format(new Date()));
+      plate.setTs(new Timestamp(System.currentTimeMillis()));
       em.persist(plate);
       utx.commit();
       return plate;
@@ -104,7 +105,7 @@ public class LicensePlateServiceImpl implements LicensePlateService {
   public List<Plate> findPlate(String requestedPlateNumber) {
     List<Plate> plates = null;
     try {
-      Query query = em.createQuery("Select a FROM Plate a where a.plateNumber like :requestedPlateNumber").setParameter("requestedPlateNumber", requestedPlateNumber);
+      Query query = em.createQuery("Select a FROM Plate a where a.plateNumber like :requestedPlateNumber order by a.ts desc").setParameter("requestedPlateNumber", requestedPlateNumber);
       plates = query.getResultList();
     } catch (Exception e) {
       LOG.log(Level.SEVERE, e.getMessage());
