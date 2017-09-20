@@ -4,7 +4,6 @@ box:
    id: golang
 
 build:
-
   box:
     id: quay.io/markxnelson/weblogic
     username: $QUAY_IO_USERNAME
@@ -51,7 +50,7 @@ test:
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: delete --ignore-not-found=true -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
+       command: delete --ignore-not-found=true -f weblogic-deployment.yaml -f weblogic-service.yaml
     - script:
        name: "Sleep for some time for clean up"
        code: |
@@ -61,15 +60,19 @@ test:
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER_PROD
-       username: $KUBERNETES_USERNAME_PROD
-       password: $KUBERNETES_PASSWORD_PROD
-       insecure-skip-tls-verify: true
-       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
+       command: create -f weblogic-deployment.yaml -f weblogic-service.yaml
+    - script:
+       name: "Wait for application to be available"
+       code: |
+         until $(curl --output /dev/null --silent --head --fail http://$WEBLOGIC_HOST_TEST:7001/licenseplates/rest/plates/list); do
+           printf '.'
+           sleep 5
+         done
+    - script:
+       name: "Run test cases"
+       code: |
+         go run main.go
 deploy:
-
   steps:          
     - blendle/publish-quay-tag:
         name: "Push staged image"
@@ -82,20 +85,10 @@ deploy:
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
        insecure-skip-tls-verify: true
-       command: delete --ignore-not-found=true -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
-    - script:
-       name: "Sleep for some time for clean up"
-       code: |
-         sleep 30
+       command: set image deployment/weblogic weblogic=quay.io/ravi_r_singhal/weblogic:licenseplates
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
        insecure-skip-tls-verify: true
-       command: create -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
-    - kubectl:
-       server: $KUBERNETES_MASTER_PROD
-       username: $KUBERNETES_USERNAME_PROD
-       password: $KUBERNETES_PASSWORD_PROD
-       insecure-skip-tls-verify: true
-       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer
+       command: rollout status deployment/weblogic
