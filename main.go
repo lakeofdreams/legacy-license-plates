@@ -64,6 +64,14 @@ func main() {
 	fmt.Println(statuses)
 
 	invokeRest(DELETE_ALL, nil)
+
+	for k, v := range statuses {
+		if strings.EqualFold(STATUS_FAILED,v) {
+			fmt.Println("Test for "+ k + " has failed.Build will not be promoted")
+			os.Exit(1)
+		}
+
+	}
 }
 
 func testGetPlateById() {
