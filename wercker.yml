@@ -82,13 +82,13 @@ deploy:
         token: $QUAY_IO_TOKEN
         repository: ravi_r_singhal/weblogic
         current: stage
-        tag: latest
+        tag: ${WERCKER_GIT_COMMIT}
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
        insecure-skip-tls-verify: true
-       command: set image deployment/weblogic weblogic=quay.io/ravi_r_singhal/weblogic:latest
+       command: set image deployment/weblogic weblogic=quay.io/ravi_r_singhal/weblogic:${WERCKER_GIT_COMMIT}
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
