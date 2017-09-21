@@ -4,6 +4,7 @@ box:
    id: golang
 
 build:
+
   box:
     id: quay.io/markxnelson/weblogic
     username: $QUAY_IO_USERNAME
@@ -50,7 +51,13 @@ test:
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: delete --ignore-not-found=true -f weblogic-deployment.yaml -f weblogic-service.yaml
+       command: delete --ignore-not-found=true -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER_TEST
+       username: $KUBERNETES_USERNAME_TEST
+       password: $KUBERNETES_PASSWORD_TEST
+       insecure-skip-tls-verify: true
+       command: delete --ignore-not-found=true svc oow-load-balancer
     - script:
        name: "Sleep for some time for clean up"
        code: |
@@ -60,7 +67,13 @@ test:
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: create -f weblogic-deployment.yaml -f weblogic-service.yaml
+       command: create -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment.yaml -f weblogic-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER_TEST
+       username: $KUBERNETES_USERNAME_TEST
+       password: $KUBERNETES_PASSWORD_TEST
+       insecure-skip-tls-verify: true
+       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer --external-ip=$WEBLOGIC_HOST_TEST --load-balancer-ip=$WEBLOGIC_HOST_TEST
     - script:
        name: "Wait for application to be available"
        code: |
@@ -74,27 +87,43 @@ test:
        name: "Run test cases"
        code: |
          go run main.go
-
 deploy:
+
   steps:          
     - blendle/publish-quay-tag:
         name: "Push staged image"
         token: $QUAY_IO_TOKEN
         repository: ravi_r_singhal/weblogic
         current: stage
-        tag: latest
+        tag: licenseplates
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
        insecure-skip-tls-verify: true
-       command: set image deployment/weblogic weblogic=quay.io/ravi_r_singhal/weblogic:latest
+       command: delete --ignore-not-found=true -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment-prod.yaml -f weblogic-service.yaml
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
        insecure-skip-tls-verify: true
-       command: rollout status deployment/weblogic
+       command: delete --ignore-not-found=true svc oow-load-balancer
+    - script:
+       name: "Sleep for some time for clean up"
+       code: |
+         sleep 30
+    - kubectl:
+       server: $KUBERNETES_MASTER_PROD
+       username: $KUBERNETES_USERNAME_PROD
+       password: $KUBERNETES_PASSWORD_PROD
+       insecure-skip-tls-verify: true
+       command: create -f database-deployment.yaml -f database-service.yaml -f weblogic-deployment-prod.yaml -f weblogic-service.yaml
+    - kubectl:
+       server: $KUBERNETES_MASTER_PROD
+       username: $KUBERNETES_USERNAME_PROD
+       password: $KUBERNETES_PASSWORD_PROD
+       insecure-skip-tls-verify: true
+       command: expose deployment weblogic --type=LoadBalancer --name=oow-load-balancer --external-ip=$WEBLOGIC_HOST_PROD --load-balancer-ip=$WEBLOGIC_HOST_PROD
     - script:
        name: "Sanity Check Production"
        code: |
