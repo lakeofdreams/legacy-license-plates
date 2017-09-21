@@ -95,7 +95,7 @@ deploy:
         token: $QUAY_IO_TOKEN
         repository: ravi_r_singhal/weblogic
         current: stage
-        tag: licenseplates
+        tag: latest
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
