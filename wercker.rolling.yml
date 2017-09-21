@@ -21,9 +21,7 @@ build:
          if [ "${validate[1]}" == "200" ]; then
            cd $WERCKER_SOURCE_DIR
            $MVN clean install
-           cp target/licenseplates.war /u01/oracle/licenseplates.war
-           ls -lahrt target/licenseplates.war
-           ls -lahrt /u01/oracle/licenseplates.war
+           cp target/licenseplates.war /u01/oracle/.
          else
            echo "No internet access. Will use the prebuilt war"
          fi
