@@ -22,6 +22,8 @@ build:
            cd $WERCKER_SOURCE_DIR
            $MVN clean install
            cp target/licenseplates.war /u01/oracle/.
+           ls -lahrt target/licenseplates.war
+           ls -lahrt /u01/oracle/licenseplates.war
          else
            echo "No internet access. Will use the prebuilt war"
          fi
