@@ -22,6 +22,7 @@ spec:
         command: 
         - /u01/oracle/entrypoint.sh
         image: quay.io/ravi_r_singhal/weblogic:stage
+        imagePullPolicy: Always
         ports:
         - containerPort: 7001
           hostPort: 7001
