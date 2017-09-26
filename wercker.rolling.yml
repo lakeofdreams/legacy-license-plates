@@ -100,7 +100,7 @@ deploy:
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
        insecure-skip-tls-verify: true
-       command: rollout status deployment/weblogic
+       command: rollout status --watch=false deployment/weblogic
     - script:
        name: "Sanity Check Production"
        code: |
