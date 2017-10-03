@@ -13,7 +13,7 @@
   <body>
     <jsp:include page="/templates/header.jsp"/>
     <h1>Welcome to the License Plate application</h1>
-    <h2>This is a test try 22</h2>
+    <h2>This is a test try 24</h2>
     <c:url value="/UpdateUserServlet" var="updateUserURL" />
     <form action="${updateUserURL}" method="POST">
       User:
