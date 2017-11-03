@@ -69,13 +69,13 @@ test:
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: create secret docker-registry quaysecret --docker-server=quay.io --docker-username=$QUAY_IO_USERNAME --docker-password=$QUAY_IO_PASSWORD
+       command: create secret docker-registry quaysecret --docker-server=quay.io --docker-username=$QUAY_IO_USERNAME --docker-password=$QUAY_IO_PASSWORD --docker-email=$QUAY_IO_EMAIL
     - kubectl:
        server: $KUBERNETES_MASTER_TEST
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: create secret docker-registry storesecret --docker-server=store --docker-username=$DOCKER_STORE_USER --docker-password=$DOCKER_STORE_PASSWORD     
+       command: create secret docker-registry storesecret --docker-server=store --docker-username=$DOCKER_STORE_USER --docker-password=$DOCKER_STORE_PASSWORD --docker-email=$DOCKER_STORE_EMAIL     
     - kubectl:
        server: $KUBERNETES_MASTER_TEST
        username: $KUBERNETES_USERNAME_TEST
@@ -111,6 +111,12 @@ deploy:
         current: stage
         tag: licenseplates
     - kubectl:
+       server: $KUBERNETES_MASTER_TEST
+       username: $KUBERNETES_USERNAME_TEST
+       password: $KUBERNETES_PASSWORD_TEST
+       insecure-skip-tls-verify: true
+       command: delete --ignore-not-found=true secret quaysecret storesecret    
+    - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
@@ -126,6 +132,18 @@ deploy:
        name: "Sleep for some time for clean up"
        code: |
          sleep 30
+    - kubectl:
+       server: $KUBERNETES_MASTER_TEST
+       username: $KUBERNETES_USERNAME_TEST
+       password: $KUBERNETES_PASSWORD_TEST
+       insecure-skip-tls-verify: true
+       command: create secret docker-registry quaysecret --docker-server=quay.io --docker-username=$QUAY_IO_USERNAME --docker-password=$QUAY_IO_PASSWORD --docker-email=$QUAY_IO_EMAIL
+    - kubectl:
+       server: $KUBERNETES_MASTER_TEST
+       username: $KUBERNETES_USERNAME_TEST
+       password: $KUBERNETES_PASSWORD_TEST
+       insecure-skip-tls-verify: true
+       command: create secret docker-registry storesecret --docker-server=store --docker-username=$DOCKER_STORE_USER --docker-password=$DOCKER_STORE_PASSWORD --docker-email=$DOCKER_STORE_EMAIL     
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
