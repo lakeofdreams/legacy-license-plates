@@ -27,7 +27,7 @@ spec:
       - name: database
         command: 
         - /home/oracle/setup/dockerInit.sh
-        image: store.docker.com/oracle/database-enterprise:12.2.0.1
+        image: store/oracle/database-enterprise:12.2.0.1
         resources:
           requests:
             memory: 10Gi
