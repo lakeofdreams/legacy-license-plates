@@ -31,6 +31,7 @@ build:
           cp $WERCKER_SOURCE_DIR/create-users.sql /u01/oracle/create-users.sql
           cp $WERCKER_SOURCE_DIR/create-schema.sql /u01/oracle/create-schema.sql
           cp $WERCKER_SOURCE_DIR/entrypoint.sh /u01/oracle/entrypoint.sh
+          chmod u+x  /u01/oracle/entrypoint.sh
     - internal/docker-push:
         username: $QUAY_IO_USERNAME
         password: $QUAY_IO_PASSWORD
