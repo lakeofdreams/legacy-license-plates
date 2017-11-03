@@ -10,7 +10,8 @@ build:
     username: $DOCKER_STORE_USER
     password: $DOCKER_STORE_PASSWORD
     tag: 12.2.1.2
-    user: root
+    cmd: sudo /bin/bash
+    entrypoint: sudo /bin/bash
 
   steps:
     - java/maven:
