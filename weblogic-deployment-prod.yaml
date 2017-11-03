@@ -26,5 +26,23 @@ spec:
         ports:
         - containerPort: 7001
           hostPort: 7001
+        readinessProbe:
+            httpGet:
+              path: /weblogic/ready
+              port: 7001
+            initialDelaySeconds: 15
+            timeoutSeconds: 5   
       imagePullSecrets: 
       - name: quaysecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weblogic
+spec:
+  selector: 
+    app: weblogic
+  ports:
+  - protocol: TCP
+    port: 7001
+    targetPort: 7001      
