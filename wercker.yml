@@ -6,12 +6,10 @@ box:
 build:
 
   box:
-    id: store/oracle/weblogic
-    username: $DOCKER_STORE_USER
-    password: $DOCKER_STORE_PASSWORD
+    id: quay.io/ravi_r_singhal/weblogic-with-root
+    username: $QUAY_IO_USERNAME
+    password: $QUAY_IO_PASSWORD
     tag: 12.2.1.2
-    cmd: sudo /bin/bash
-    entrypoint: sudo /bin/bash
 
   steps:
     - java/maven:
