@@ -30,6 +30,7 @@ build:
         code: |
           cp $WERCKER_SOURCE_DIR/create-users.sql /u01/oracle/create-users.sql
           cp $WERCKER_SOURCE_DIR/create-schema.sql /u01/oracle/create-schema.sql
+          cp $WERCKER_SOURCE_DIR/entrypoint.sh /u01/oracle/entrypoint.sh
     - internal/docker-push:
         username: $QUAY_IO_USERNAME
         password: $QUAY_IO_PASSWORD
@@ -75,7 +76,7 @@ test:
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: create secret docker-registry storesecret --docker-server=store --docker-username=$DOCKER_STORE_USER --docker-password=$DOCKER_STORE_PASSWORD --docker-email=$DOCKER_STORE_EMAIL     
+       command: create secret docker-registry storesecret --docker-username=$DOCKER_STORE_USER --docker-password=$DOCKER_STORE_PASSWORD --docker-email=$DOCKER_STORE_EMAIL     
     - kubectl:
        server: $KUBERNETES_MASTER_TEST
        username: $KUBERNETES_USERNAME_TEST
@@ -143,7 +144,7 @@ deploy:
        username: $KUBERNETES_USERNAME_TEST
        password: $KUBERNETES_PASSWORD_TEST
        insecure-skip-tls-verify: true
-       command: create secret docker-registry storesecret --docker-server=store --docker-username=$DOCKER_STORE_USER --docker-password=$DOCKER_STORE_PASSWORD --docker-email=$DOCKER_STORE_EMAIL     
+       command: create secret docker-registry storesecret --docker-username=$DOCKER_STORE_USER --docker-password=$DOCKER_STORE_PASSWORD --docker-email=$DOCKER_STORE_EMAIL     
     - kubectl:
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
