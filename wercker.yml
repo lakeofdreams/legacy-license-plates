@@ -12,12 +12,16 @@ build:
     tag: 12.2.1.2
 
   steps:
-    - xenoterracide/maven:
-        goals: clean install
     - script:
-       name: "Copy Application war" 
+       name: "Create and Copy Application war" 
        code: | 
-          cp target/licenseplates.war /u01/oracle/.
+         echo "Install Maven"
+         yum install -y wget
+         wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+         sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+         yum install -y apache-maven
+         mvn clean install
+         cp target/licenseplates.war /u01/oracle/.
     - markxnelson/weblogic-step@0.1.24:
         name: "Setup weblogic domain" 
         config: weblogic-config.json
