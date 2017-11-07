@@ -29,6 +29,7 @@ then
    oracle.jdbc.OracleDriver \
    -u "sys as sysdba" \
    -p Welcome1 \
+   -verbose \  
    /u01/oracle/create-users.sql
 fi
 # userid hard coded for now - fix this later
@@ -41,6 +42,7 @@ then
    oracle.jdbc.OracleDriver \
    -u c##mark \
    -p Welcome1 \
+   -verbose \
    /u01/oracle/create-schema.sql
 fi
 
