@@ -22,7 +22,7 @@ build:
          yum install -y apache-maven
          mvn clean install
          cp target/licenseplates.war /u01/oracle/.
-         yum install dos2unix
+         yum -y install dos2unix
     - markxnelson/weblogic-step@0.1.24:
         name: "Setup weblogic domain" 
         config: weblogic-config.json
