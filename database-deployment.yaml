@@ -5,19 +5,19 @@ metadata:
   namespace: default
   labels:
     app: database
-    version: 12.1.0.2
+    version: 12.2.0.1
 spec:
   replicas: 1
   selector:
     matchLabels: 
       app: database
-      version: 12.1.0.2
+      version: 12.2.0.1
   template:
     metadata:
       name: database
       labels: 
         app: database
-        version: 12.1.0.2
+        version: 12.2.0.1
     spec:
       volumes:
       - name: dshm
@@ -27,7 +27,7 @@ spec:
       - name: database
         command: 
         - /home/oracle/setup/dockerInit.sh
-        image: store/oracle/database-enterprise:12.1.0.2
+        image: store/oracle/database-enterprise:12.2.0.1
         resources:
           requests:
             memory: 10Gi
@@ -60,7 +60,7 @@ metadata:
 spec:
   selector:
     app: database
-    version: 12.1.0.2
+    version: 12.2.0.1
   ports:
   - protocol: TCP
     port: 1521
