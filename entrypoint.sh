@@ -28,7 +28,7 @@ then
    jdbc:oracle:thin:@//database:1521/OraDoc.my.domain.com \
    oracle.jdbc.OracleDriver \
    -u "sys as sysdba" \
-   -p Welcome1 \
+   -p "Welcome1" \
    -verbose \  
    /u01/oracle/create-users.sql
 fi
@@ -40,8 +40,8 @@ then
    utils.Schema \
    jdbc:oracle:thin:@//database:1521/OraDoc.my.domain.com \
    oracle.jdbc.OracleDriver \
-   -u c##mark \
-   -p Welcome1 \
+   -u "c##mark" \
+   -p "Welcome1" \
    -verbose \
    /u01/oracle/create-schema.sql
 fi
