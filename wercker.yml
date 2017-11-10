@@ -6,8 +6,7 @@ box:
 build:
 
   box:
-    #id: quay.io/ravi_r_singhal/weblogic-with-root
-    id: quay.io/markxnelson/weblogic
+    id: quay.io/ravi_r_singhal/weblogic-with-root
     username: $QUAY_IO_USERNAME
     password: $QUAY_IO_PASSWORD
     tag: 12.2.1.2
