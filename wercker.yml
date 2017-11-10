@@ -35,6 +35,7 @@ build:
           chmod 777  /u01/oracle/entrypoint.sh
           chmod 777  /u01/oracle/*.sql
           dos2unix /u01/oracle/entrypoint.sh
+          ls -lahrt /u01/oracle
     - internal/docker-push:
         username: $QUAY_IO_USERNAME
         password: $QUAY_IO_PASSWORD
