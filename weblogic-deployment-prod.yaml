@@ -21,7 +21,7 @@ spec:
       - name: weblogic
         command: 
         - /u01/oracle/entrypoint.sh
-        image: quay.io/ravi_r_singhal/weblogic:licenseplates
+        image: quay.io/ravi_r_singhal/weblogic:licenseplates-prod
         imagePullPolicy: Always
         ports:
         - containerPort: 7001
