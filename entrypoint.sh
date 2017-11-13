@@ -25,10 +25,10 @@ then
    echo "Creating users..."
    java -classpath /u01/oracle/wlserver/server/lib/weblogic.jar \
    utils.Schema \
-   jdbc:oracle:thin:@//database:1521/OraDoc.my.domain.com \
+   jdbc:oracle:thin:@//database:1521/ORCLCDB.localdomain \
    oracle.jdbc.OracleDriver \
    -u "sys as sysdba" \
-   -p "Welcome1" \
+   -p "Oradoc_db1" \
    -verbose \  
    /u01/oracle/create-users.sql
 fi
@@ -38,7 +38,7 @@ then
    echo "Creating schema..."
    java -classpath /u01/oracle/wlserver/server/lib/weblogic.jar \
    utils.Schema \
-   jdbc:oracle:thin:@//database:1521/OraDoc.my.domain.com \
+   jdbc:oracle:thin:@//database:1521/ORCLCDB.localdomain \
    oracle.jdbc.OracleDriver \
    -u "c##mark" \
    -p "Welcome1" \

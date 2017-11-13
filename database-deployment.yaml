@@ -38,16 +38,6 @@ spec:
           - mountPath: /dev/shm
             name: dshm
         env:
-          - name: DB_SID 
-            value: OraDoc
-          - name: DB_PDB
-            value: OraPdb 
-          - name: DB_PASSWD
-            value: Welcome1 
-          - name: DB_DOMAIN
-            value: my.domain.com
-          - name: DB_BUNDLE
-            value: basic
           - name: DB_MEMORY
             value: 8g
       imagePullSecrets: 
