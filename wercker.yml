@@ -10,6 +10,7 @@ build:
     username: $QUAY_IO_USERNAME
     password: $QUAY_IO_PASSWORD
     tag: licenseplates
+    entrypoint: "/bin/sh -c /bin/bash"
 
   steps:
     - script:
