@@ -2,7 +2,6 @@
 
 box:
    id: golang
-   no-response-timeout: 20
 
 build:
 
@@ -65,6 +64,7 @@ test:
          go run main.go
 deploy:
 
+  no-response-timeout: 20
   steps:          
     - blendle/publish-quay-tag:
         name: "Tag staged image(licenseplates-stage) with git commit id ${WERCKER_GIT_COMMIT}"
