@@ -2,7 +2,7 @@
 
 box:
    id: golang
-   command-timeout: 30
+command-timeout: 30   
 build:
 
   box:
