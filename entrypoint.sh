@@ -29,7 +29,7 @@ then
    oracle.jdbc.OracleDriver \
    -u "sys as sysdba" \
    -p "Oradoc_db1" \
-   -verbose \  
+   -verbose \
    /u01/oracle/create-users.sql
 fi
 # userid hard coded for now - fix this later
