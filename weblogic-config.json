@@ -9,7 +9,7 @@
     {
       "name": "licenseplatesDB",
       "jndiName": "jdbc/licenseplates",
-      "url": "jdbc:oracle:thin:@//database:1521/OraDoc.my.domain.com",
+      "url": "jdbc:oracle:thin:@//database:1521/ORCLCDB.localdomain",
       "user": "c##mark",
       "password": "Welcome1"
     }
