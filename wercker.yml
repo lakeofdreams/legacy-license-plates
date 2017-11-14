@@ -2,7 +2,8 @@
 
 box:
    id: golang
-command-timeout: 30   
+command-timeout: 30
+no-response-timeout: 30   
 build:
 
   box:
@@ -66,13 +67,13 @@ deploy:
 
   steps:          
     - blendle/publish-quay-tag:
-        name: "Tag staged image(licenseplates-stage) with git commit id ${WERCKER_GIT_COMMIT}"
+        name: "Tag staged image(licenseplates-stage) with git commit id"
         token: $QUAY_IO_TOKEN
         repository: ravi_r_singhal/weblogic
         current: licenseplates-stage
         tag: ${WERCKER_GIT_COMMIT}    
     - kubectl:
-       name: "Change tag of image in PROD deployment to ${WERCKER_GIT_COMMIT} to initiate rolling update"
+       name: "Change tag of image in PROD deployment to git commit id to initiate rolling update"
        server: $KUBERNETES_MASTER_PROD
        username: $KUBERNETES_USERNAME_PROD
        password: $KUBERNETES_PASSWORD_PROD
@@ -101,7 +102,7 @@ deploy:
         current: licenseplates-prod
         tag: licenseplates-prod-last     
     - blendle/publish-quay-tag:
-        name: "Tag currently deployed image with git commit id ${WERCKER_GIT_COMMIT} to tag licenseplates-prod"
+        name: "Tag currently deployed image with git commit id to tag licenseplates-prod"
         name: "Tag deployed image with tag as licenseplates"
         token: $QUAY_IO_TOKEN
         repository: ravi_r_singhal/weblogic
